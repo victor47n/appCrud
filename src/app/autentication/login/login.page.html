@@ -1,0 +1,52 @@
+<ion-content class="ion-padding">
+  <!--Adicionar o padding, para dar uma melhor aparencia-->
+  <h1 class="ion-text-center">
+    <ion-icon name="logo-ionitron" class="logo"></ion-icon>
+  </h1>
+
+  <form [formGroup]="autenticationForm" (submit)="onSubmit()">
+
+    <ng-container *ngIf="!configs.eLogin">
+      <ion-item>
+        <ion-icon name="person" color="dark" class="ion-padding" slot="end"></ion-icon>
+        <!--Define a posição do conteudo (start é antes, end é no final)-->
+        <ion-input type="text" name="name" formControlName="name" color="dark" placeholder="Digite seu nome">
+        </ion-input>
+        <ion-note color="danger" *ngIf="name.dirty && name.hasError('required')" slot="start">Campo obrigatório!
+        </ion-note>
+        <ion-note color="danger" *ngIf="name.dirty && name.hasError('name')" slot="start">Mínimo de 3 dígitos!
+        </ion-note>
+      </ion-item>
+    </ng-container>
+
+    <ion-item>
+      <ion-icon name="mail" color="dark" class="ion-padding" slot="end"></ion-icon>
+      <!--Define a posição do conteudo (start é antes, end é no final)-->
+      <ion-input type="email" name="email" formControlName="email" color="dark" placeholder="Email"></ion-input>
+      <ion-note color="danger" *ngIf="email.dirty && email.hasError('required')" slot="start">Campo obrigatório!
+      </ion-note>
+      <ion-note color="danger" *ngIf="email.dirty && email.hasError('email')" slot="start">E-mail inválido!</ion-note>
+    </ion-item>
+
+    <ion-item>
+      <ion-icon name="key" color="dark" class="ion-padding" slot="end"></ion-icon>
+      <ion-input type="password" name="password" formControlName="password" color="dark" placeholder="Password">
+      </ion-input>
+      <ion-note color="danger" *ngIf="password.dirty && password.hasError('required')" slot="start">Campo obrigatório!
+      </ion-note>
+      <ion-note color="danger" *ngIf="password.dirty && password.hasError('minlength')" slot="start">Mínimo de 6 dígitos
+      </ion-note>
+    </ion-item>
+  </form>
+
+  <ion-button type="submit" [disabled]="autenticationForm.invalid" expand="block" color="dark" class="ion-padding">
+    {{configs.primaryAction}}</ion-button>
+  <ion-button expand="block" color="dark" fill="clear" class="ion-padding" (click)='toggleWindow()'>
+    {{configs.secundaryAction}}</ion-button>
+  <ion-button expand="block" color="dark" fill="clear" class="ion-padding">
+    <ion-icon name="logo-facebook" slot="start"></ion-icon>
+    Login com Facebook
+  </ion-button>
+
+
+</ion-content>
