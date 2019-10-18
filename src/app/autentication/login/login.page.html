@@ -41,9 +41,9 @@
 
   <ion-button type="submit" [disabled]="autenticationForm.invalid" expand="block" color="dark" class="ion-padding">
     {{configs.primaryAction}}</ion-button>
-  <ion-button expand="block" color="dark" fill="clear" class="ion-padding" (click)='toggleWindow()'>
+  <ion-button expand="block" color="dark" fill="clear" class="ion-padding" (click)="toggleWindow()">
     {{configs.secundaryAction}}</ion-button>
-  <ion-button expand="block" color="dark" fill="clear" class="ion-padding">
+  <ion-button expand="block" color="dark" fill="clear" class="ion-padding" (click)="onSubmit('facebook')">
     <ion-icon name="logo-facebook" slot="start"></ion-icon>
     Login com Facebook
   </ion-button>
