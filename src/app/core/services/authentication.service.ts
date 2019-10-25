@@ -1,21 +1,36 @@
 import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/auth';
 
+import { AngularFireAuth } from '@angular/fire/auth';
 import { auth } from 'firebase/app';
+import { Observable } from 'rxjs';
+
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthenticationService {
 
-  constructor(private fbAuthenticate:AngularFireAuth) { }
+  stateAuthentication$: Observable<firebase.User>;
 
-  authentication(eLogin:boolean, name:string, email:string, password:string) {
+  constructor(private fbAuthenticate:AngularFireAuth) {
+    this.stateAuthentication$ = this.fbAuthenticate.authState;
+   }
+
+  authentication(eLogin:boolean, name:string, email:string, password:string): Promise<auth.UserCredential> {
     if(eLogin) {
       return this.loginEmail(email, password);
     } else {
       return this.createAccEmail(name, email, password);
     }
+  }
+
+  logout(): Promise<void> {
+    return this.fbAuthenticate.auth.signOut();
+  }
+
+  get isAuthenticate():Observable<boolean> {
+    return this.stateAuthentication$.pipe( map( user => user !== null ) );
   }
 
   /* Quando a pessoa conectar, irá retornar os dados de autenticação do usuário */

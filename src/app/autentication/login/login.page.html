@@ -4,7 +4,7 @@
     <ion-icon name="logo-ionitron" class="logo"></ion-icon>
   </h1>
 
-  <form [formGroup]="autenticationForm" (submit)="onSubmit()">
+  <form [formGroup]="autenticationForm" (submit)="onSubmit('email')">
 
     <ng-container *ngIf="!configs.eLogin">
       <ion-item>

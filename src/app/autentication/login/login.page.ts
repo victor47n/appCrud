@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl, FormBuilder } from '@angular/forms';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { LoadingController, ToastController } from '@ionic/angular';
+import { ToastOptions } from '@ionic/core';
+import { NavController } from '@ionic/angular';
+import { Options } from 'selenium-webdriver/ie';
+
 
 @Component({
   selector: 'app-login',
@@ -22,7 +27,9 @@ export class LoginPage implements OnInit {
   /* Criando o validador do campo nome */
   private nameControl = new FormControl('', [Validators.required, Validators.minLength(3)]);
 
-  constructor(private serviceAuthentication:AuthenticationService, private fb:FormBuilder) { }
+  private nameTemp:string
+
+  constructor(private navCtrl:NavController, private serviceAuthentication:AuthenticationService, private fb:FormBuilder, private loadingCtrl: LoadingController, private toastCtrl: ToastController) { }
 
   ngOnInit() {
     this.createForm();
@@ -35,9 +42,33 @@ export class LoginPage implements OnInit {
     });
   }
 
-  async onSubmit():Promise<void> {
+  async onSubmit(provider:string):Promise<void> {
     console.log("ta funcionando", this.autenticationForm.value);
-  }
+
+    const loading = await this.loading();
+
+    if(this.configs.eLogin) {
+      this.nameTemp = "";
+    } else {
+      this.nameTemp = this.autenticationForm.get('name').value;
+    }
+
+    try {
+      const credential = await this.serviceAuthentication.authentication(this.configs.eLogin,
+        this.nameTemp, this.autenticationForm.get('email').value,
+        this.autenticationForm.get('password').value);
+
+        this.navCtrl.navigateForward('task-list');
+    } catch(e) {
+      console.log("Ocorreu o seguinte erro: ", e);
+
+      this.toast({
+        message: e.message
+      });
+    } finally {
+      loading.dismiss();
+    }
+  };
 
   toggleWindow():void {
     this.configs.eLogin = !this.configs.eLogin;
@@ -68,6 +99,30 @@ export class LoginPage implements OnInit {
 
   get password():FormControl {
     return <FormControl>this.autenticationForm.get('password');
+  }
+
+  async loading(): Promise<HTMLIonLoadingElement> {
+    const loading = await this.loadingCtrl.create({
+      message: "Autenticando..."
+    });
+
+    await loading.present();
+
+    return loading;
+  }
+
+  async toast(options?: ToastOptions): Promise<HTMLIonToastElement> {
+    const toast = await this.toastCtrl.create({
+      position: 'bottom',
+      duration: 3000,
+      showCloseButton: true,
+      closeButtonText: 'Ok',
+      ...options
+    });
+
+    await toast.present();
+
+    return toast;
   }
 
 }
