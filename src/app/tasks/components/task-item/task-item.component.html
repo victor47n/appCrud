@@ -1,11 +1,24 @@
-<ion-item-sliding>
+<ion-item-sliding #sliding>
 
-  <ion-item>
-    {{ task.title }}
-    <ion-toggle slot="end" color="primary" [checked]="task.realized">
+	<ion-item (click)="update.emit(task)">
 
-    </ion-toggle>
+		{{ task.title }}
+		<ion-toggle slot="end" color="dark" [checked]="task.realized" (click)="realized.emit(task); $event.stopPropagation()">
 
-  </ion-item>
+		</ion-toggle>
+
+	</ion-item>
+
+	<ion-item-options side="start">
+
+		<ion-item-option color="danger" (click)="delete.emit(task); sliding.close()">
+			<ion-icon name="trash" slot="ion-only"></ion-icon>
+		</ion-item-option>
+
+		<ion-item-option (click)="update.emit(task); sliding.close()">
+			<ion-icon name="create" slot="ion-only"></ion-icon>
+		</ion-item-option>
+
+	</ion-item-options>
 
 </ion-item-sliding>

@@ -39,7 +39,7 @@
     </ion-item>
   </form>
 
-  <ion-button type="submit" [disabled]="autenticationForm.invalid" expand="block" color="dark" class="ion-padding">
+  <ion-button type="submit" [disabled]="autenticationForm.invalid" expand="block" color="dark" class="ion-padding" (click)="onSubmit('email')">
     {{configs.primaryAction}}</ion-button>
   <ion-button expand="block" color="dark" fill="clear" class="ion-padding" (click)="toggleWindow()">
     {{configs.secundaryAction}}</ion-button>

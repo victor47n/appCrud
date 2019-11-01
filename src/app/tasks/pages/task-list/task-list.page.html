@@ -5,11 +5,12 @@
 </ion-header>
 
 <ion-content padding>
+
   <ion-list>
-    <ion-item>Aprender IONIC</ion-item>
+    <app-task-item *ngFor="let tk of (tasks$ | async)" [task]="tk"></app-task-item>
   </ion-list>
 
-  <ion-fab vertical="bottom" horizontal="end">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
